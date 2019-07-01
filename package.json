@@ -1,6 +1,6 @@
 {
   "name": "create-event-bus",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "create-event-bus",
   "main": "create-event-bus.js",
   "scripts": {
