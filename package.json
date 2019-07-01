@@ -1,0 +1,23 @@
+{
+  "name": "create-event-bus",
+  "version": "1.0.2",
+  "description": "create-event-bus",
+  "main": "create-event-bus.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bestime/create-event-bus.git"
+  },
+  "keywords": [
+    "bus",
+    "bestime"
+  ],
+  "author": "Bestime",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bestime/create-event-bus/issues"
+  },
+  "homepage": "https://github.com/bestime/create-event-bus#readme"
+}

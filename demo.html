@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>create-event-bus 测试</title>
+  <style>
+    li{
+      padding:5px 0;
+    }
+    b{
+      font-size:12px;
+      background:#30a044;
+      color: #fff;
+      padding: 3px 10px;
+      margin-right:10px;
+    }
+
+    .disabled b{
+      background:#eee;
+      color:#666;
+      cursor:pointer;
+    }
+  </style>
+</head>
+<body>  
+  <button onclick="callZhangSan()">通知bus.emit('张三')</button>
+  <button onclick="callOnly()">通知bus.emit('唯一函数名')</button>
+  
+  <ul>
+    <li><b>【bus.on('张三')】</b><span id="z01"></span></li>
+    <li><b>【bus.on('张三')】</b><span id="z02"></span></li>
+    <li><b>【bus.once('张三')】</b><span id="z03"></span></li>
+    <li><b>【bus.one('唯一函数名')】</b><span id="z04">这个将被覆盖</span></li>
+    <li><b>【bus.one('唯一函数名')】上面一个将不生效</b><span id="z05"></span></li>
+    <li class="disabled" id="jihuo"><b>点击激活 -> 【bus.oneonce('唯一函数名')上面一个将不生效，并且只执行一次】</b><span id="z06"></span></li>
+  </ul>
+  <button onclick="clearAll()">清空所有bus事件</button>
+  <script src="./create-event-bus.js"></script>
+  <script>
+    var bus = new CreateEventBus()
+    var demo01 = null
+    var demo02 = null
+    var demo03 = null
+    var demo04 = null
+    var demo05 = null
+    var demo06 = null
+
+    bus.clear(demo01)
+    demo01 = bus.on('张三', function () {
+      document.getElementById('z01').innerHTML += '0'
+    })
+
+    bus.clear(demo02)
+    demo02 = bus.on('张三', function () {
+      document.getElementById('z02').innerHTML += '0'
+    })
+
+
+    bus.clear(demo03)
+    demo03 = bus.once('张三', function () {
+      document.getElementById('z03').innerHTML += '0'
+    })
+
+    bus.clear(demo04)
+    demo04 = bus.one('唯一函数名', function () {
+      document.getElementById('z04').innerHTML += '0'
+    })
+
+    bus.clear(demo05)
+    demo05 = bus.one('唯一函数名', function () {
+      document.getElementById('z05').innerHTML += '0'
+    })
+
+    bus.clear(demo06)
+    document.getElementById('jihuo').onclick = function () {
+      if(demo06) return;
+      this.className = ''
+      demo06 = bus.oneonce('唯一函数名', function () {
+        document.getElementById('z06').innerHTML += '0'
+      })
+    }
+
+
+
+    function callZhangSan () {
+      bus.emit('张三', '这里可以带数据')
+    }
+
+    function callOnly () {
+      bus.emit('唯一函数名', '这里可以带数据')
+    }
+
+    function clearAll () {
+      bus.clear(demo01)
+      bus.clear(demo02)
+      bus.clear(demo03)
+      bus.clear(demo04)
+      bus.clear(demo05)
+      bus.clear(demo06)
+      alert('事件清除成功')
+    }
+  </script>
+</body>
+</html>
