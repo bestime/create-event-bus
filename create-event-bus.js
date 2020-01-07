@@ -25,14 +25,15 @@
   }
 
   // 基础注册函数
-  Bus.prototype.create = function (customeid, name, handle, isOnce, onlyOne) {
+  Bus.prototype.create = function (customeid, name, handle, isOnce, onlyOne, type) {
     if(getType(handle) !== 'Function') return null;
     var useId = customeid ? customeid : this.autoId++
     var oneHandle = {      
       name: name,
       id: useId,
       handle: handle,
-      isOnce: isOnce===true ? true : false
+      isOnce: isOnce===true ? true : false,
+      type: type
     };
 
     if(onlyOne) {
@@ -53,20 +54,35 @@
   }
 
   // 事件触发
-  Bus.prototype.emit = function (name, data) {    
+  Bus.prototype.emit = function (name) {   
+    var data = []
+    for(var a = 1, len = arguments.length; a < len; a++) {
+      data.push(arguments[a])
+    }
     switch (getType(this.events[name])) {
       case 'Object':
-        this.events[name].handle(data, this.events[name])
-        if(this.events[name].isOnce) {
-          delete this.events[name]
+        if(
+          !this.events[name].type
+          || this.events[name].type === data[0]
+        ) {
+          this.events[name].handle.apply(this.events[name], data)
+          if(this.events[name].isOnce) {
+            delete this.events[name]
+          }
+          break;
         }
-        break;
+        
       case 'Array':
         for(var a=this.events[name].length-1; a>=0; a--) {
           var item = this.events[name][a]
-          item.handle(data, item)
-          if(item.isOnce) {
-            this.events[name].splice(a, 1)
+          item.handle.apply(item, data)
+          if(
+            !item.type
+            || data[0] === item.type
+          ) {
+            if(item.isOnce) {
+              this.events[name].splice(a, 1)
+            }
           }
         }
         break;
@@ -95,6 +111,8 @@
         break;
     }
   }
+
+  
 
   // 【注册】 永久函数
   Bus.prototype.on = function (name, handle, id) {
