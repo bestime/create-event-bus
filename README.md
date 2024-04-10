@@ -1,5 +1,5 @@
 
-
+## 不再维护
 
 #### 参数详解
 
@@ -11,7 +11,7 @@
 #### 安装
 ```
 // 使用 npm
-npm i create-bus
+npm i create-event-bus
 const CreateEventBus = require('create-event-bus'); // 引入方式01
 import CreateEventBus from 'create-event-bus'; // 引入方式02
 
